@@ -1,4 +1,5 @@
 ﻿using System;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Module_5
 {
@@ -6,21 +7,17 @@ namespace Module_5
     {
         static void Main(string[] args)
         {
-            EnterUser(Anketa);
+            EnterUser();
+            ShowData();
         }
-
-        static void EnterUser(string Name, string LastName, int Age, int NumPet, int NumFavColor)
+        static (string Name, string LastName, int Age, int NumPet, int NumFavColor, bool HavePet, string[] PetName, string[] favColor) Anketa;
+        static (string Name, string LastName, int Age, int NumPet, int NumFavColor, bool HavePet, string[] PetName, string[] favColor) EnterUser()
         {
-            (string Name, string LastName, int Age, int NumPet, int NumFavColor) Anketa;
-
             Console.Write("Введите имя: ");
             Anketa.Name = Console.ReadLine();
 
             Console.Write("Введите фамилию: ");
             Anketa.LastName = Console.ReadLine();
-
-            //string[] PetName
-            //string[] favColor 
 
             string age;
             int intage;
@@ -34,10 +31,16 @@ namespace Module_5
             Anketa.Age = intage;
 
             Console.Write("Есть ли у вас питомцы? (Да/Нет): ");
-            var HavePet = Console.ReadLine();
-
-            if (HavePet == "да" || HavePet == "Да")
+            var PetResult = Console.ReadLine();
+            
+            while(PetResult != "Да" && PetResult != "Нет")
             {
+                Console.WriteLine("Некорректный ответ, пожалуйста, ответьте Да или Нет");
+                PetResult = Console.ReadLine();
+            }
+            if (PetResult == "Да")
+            {
+                Anketa.HavePet = true;
                 string pet;
                 int intpet;
                 do
@@ -48,6 +51,18 @@ namespace Module_5
                 } while (Checknum(pet, out intpet));
 
                 Anketa.NumPet = intpet;
+
+                string[] PetName = new string[intpet];
+                Console.WriteLine("Введите имя/имена питомца(цев): ");
+                for (int i = 0; i < intpet; i++)
+                {
+                    PetName[i] = Console.ReadLine();
+                }  
+            }
+
+            else
+            {
+                Anketa.NumPet = 0;
             }
 
             string colors;
@@ -59,6 +74,15 @@ namespace Module_5
             } while (Checknum(colors, out intcolors));
 
             Anketa.NumFavColor = intcolors;
+
+            string[] favColor = new string[intcolors];
+            Console.WriteLine("Введите Ваш(и) любимый(е) цвет(а): ");
+            for (int i = 0; i < intcolors; i++)
+            {
+                favColor[i] = Console.ReadLine();
+            }
+
+            return Anketa;
         }
 
         static bool Checknum(string number, out int corrnumber)
@@ -73,9 +97,35 @@ namespace Module_5
                 }
             }
             {
+                Console.WriteLine("Некорректное значение, введите значение цифрами");
                 corrnumber = 0;
                 return true;
             }
+        }
+        static (string Name, string LastName, int Age, int NumPet, int NumFavColor, bool HavePet, string[] PetName, string[] favColor) ShowData()
+        {
+            Console.WriteLine($"Имя: {Anketa.Name}");
+            Console.WriteLine($"Фамилия: {Anketa.LastName}");
+            Console.WriteLine($"Возраст: {Anketa.Age}"); if (Anketa.HavePet)
+            {
+                Console.WriteLine($"Количество питомцев: {Anketa.NumPet}");
+                Console.WriteLine("Клички питомцев:"); foreach (string pet in Anketa.PetName)
+                {
+                    Console.WriteLine(pet);
+                }
+            }
+            else
+            {
+                Console.WriteLine("У пользователя нет питомцев");
+            }
+            Console.WriteLine($"Количество любимых цветов: {Anketa.NumFavColor}");
+            Console.WriteLine("Любимые цвета:");
+            foreach (string col in Anketa.favColor)
+            {
+                Console.WriteLine(col);
+            }
+
+            return Anketa;
         }
     }
 }

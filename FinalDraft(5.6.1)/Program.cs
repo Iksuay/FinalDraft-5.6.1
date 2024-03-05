@@ -1,5 +1,4 @@
 ﻿using System;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Module_5
 {
@@ -57,7 +56,9 @@ namespace Module_5
                 for (int i = 0; i < intpet; i++)
                 {
                     PetName[i] = Console.ReadLine();
-                }  
+                }
+                
+                Anketa.PetName = PetName;
             }
 
             else
@@ -82,6 +83,8 @@ namespace Module_5
                 favColor[i] = Console.ReadLine();
             }
 
+            Anketa.favColor = favColor;
+
             return Anketa;
         }
 
@@ -104,12 +107,14 @@ namespace Module_5
         }
         static (string Name, string LastName, int Age, int NumPet, int NumFavColor, bool HavePet, string[] PetName, string[] favColor) ShowData()
         {
+            Console.WriteLine("/////////////////////////////");
             Console.WriteLine($"Имя: {Anketa.Name}");
             Console.WriteLine($"Фамилия: {Anketa.LastName}");
             Console.WriteLine($"Возраст: {Anketa.Age}"); if (Anketa.HavePet)
             {
                 Console.WriteLine($"Количество питомцев: {Anketa.NumPet}");
-                Console.WriteLine("Клички питомцев:"); foreach (string pet in Anketa.PetName)
+                Console.WriteLine("Клички питомцев:"); 
+                foreach (string pet in Anketa.PetName)
                 {
                     Console.WriteLine(pet);
                 }
